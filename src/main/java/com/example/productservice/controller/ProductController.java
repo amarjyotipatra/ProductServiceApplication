@@ -22,8 +22,7 @@ public class ProductController {
     public Product getProductById(@PathVariable("id") int id) {
         //validations
 //        if(id == null) throw new IllegalArgumentException("id is null");
-        Product response = service.getProductById(id);
-        return response;
+        return service.getProductById(id);
     }
 
     @PostMapping("/products")

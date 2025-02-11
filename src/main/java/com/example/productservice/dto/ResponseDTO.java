@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResponseDTO {
-    private int id;
+    private Integer id;
     private String title;
+    private String category;
     private String description;
-    private String imageURL;
-    private Category category;
+    private String image;
 }
