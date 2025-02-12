@@ -1,5 +1,6 @@
 package com.example.productservice.service;
 
+import com.example.productservice.dto.CreateProductRequestDTO;
 import com.example.productservice.dto.ResponseDTO;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
@@ -57,5 +58,16 @@ public class ProductService {
             products.add(convertFakeStoreResponseToProduct(responseObj));
         }
         return products;
+    }
+
+    public Product createProduct(String title, String imageURL, String category, String description) {
+        ResponseDTO requestBody = new ResponseDTO();
+        requestBody.setTitle(title);
+        requestBody.setDescription(description);
+        requestBody.setImage(imageURL);
+        requestBody.setCategory(category);
+
+        ResponseEntity<ResponseDTO> response=restTemplate.postForEntity("https://fakestoreapi.com/products", requestBody, ResponseDTO.class);
+        return convertFakeStoreResponseToProduct(response.getBody());
     }
 }
