@@ -1,6 +1,7 @@
 package com.example.productservice.controller;
 
 import com.example.productservice.dto.CreateProductRequestDTO;
+import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
 import org.springframework.http.HttpStatus;
@@ -19,19 +20,23 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<Product>> getAllProducts() throws ProductNotFoundException {
         List<Product> products=service.getAllProducts();
         if(products.size()==0 || products==null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ProductNotFoundException("Product is Empty!!!");
         }
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") int id) {
+    public ResponseEntity<Product> getProductById(@PathVariable("id") int id) throws ProductNotFoundException {
         //validations
-//        if(id == null) throw new IllegalArgumentException("id is null");
-        return ResponseEntity.ok(service.getProductById(id));
+        if(id == Integer.parseInt(null)) throw new IllegalArgumentException("id is null");
+        Product product=service.getProductById(id);
+        if(product==null) {
+            throw new ProductNotFoundException("Product Not Found");
+        }
+        return ResponseEntity.ok(product);
     }
 
     @PostMapping("/products")
