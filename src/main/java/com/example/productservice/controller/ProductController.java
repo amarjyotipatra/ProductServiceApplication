@@ -28,14 +28,14 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable("id") int id) {
+    public ResponseEntity<Product> getProductById(@PathVariable("id") int id) {
         //validations
 //        if(id == null) throw new IllegalArgumentException("id is null");
-        return service.getProductById(id);
+        return ResponseEntity.ok(service.getProductById(id));
     }
 
     @PostMapping("/products")
-    public Product createProduct(@RequestBody CreateProductRequestDTO request) {
+    public ResponseEntity<Product> createProduct(@RequestBody CreateProductRequestDTO request) {
         if(request.getTitle()==null)
             throw new IllegalArgumentException("Title cannot be null");
         if(request.getDescription()==null)
@@ -45,7 +45,8 @@ public class ProductController {
         if(request.getImageURL()==null)
             throw new IllegalArgumentException("ImageURL cannot be null");
 
-        return service.createProduct(request.getTitle(), request.getImageURL(), request.getCategory().getTitle(),request.getDescription());
+        return ResponseEntity.ok(service.createProduct(
+                request.getTitle(), request.getImageURL(), request.getCategory().getTitle(),request.getDescription()));
     }
 
     @PutMapping("/products/{id}")
