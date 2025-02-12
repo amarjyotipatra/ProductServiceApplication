@@ -3,10 +3,12 @@ package com.example.productservice.service;
 import com.example.productservice.dto.ResponseDTO;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -46,5 +48,14 @@ public class ProductService {
         product.setImageURL(response.getImage());
         product.setTitle(response.getTitle());
         return product;
+    }
+
+    public List<Product> getAllProducts() {
+        List<Product> products=new ArrayList<>();
+        ResponseEntity<ResponseDTO[]> response=restTemplate.getForEntity("https://fakestoreapi.com/products", ResponseDTO[].class);
+        for(ResponseDTO responseObj:response.getBody()) {
+            products.add(convertFakeStoreResponseToProduct(responseObj));
+        }
+        return products;
     }
 }

@@ -2,7 +2,11 @@ package com.example.productservice.controller;
 
 import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -14,8 +18,12 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public void getAllProducts() {
-
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> products=service.getAllProducts();
+        if(products.size()==0 || products==null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/products/{id}")
