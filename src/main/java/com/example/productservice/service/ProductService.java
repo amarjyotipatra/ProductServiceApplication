@@ -1,5 +1,6 @@
 package com.example.productservice.service;
 
+import com.example.productservice.dto.CategoryRequestDTO;
 import com.example.productservice.dto.CreateProductRequestDTO;
 import com.example.productservice.dto.ResponseDTO;
 import com.example.productservice.model.Category;
@@ -70,4 +71,10 @@ public class ProductService {
         ResponseEntity<ResponseDTO> response=restTemplate.postForEntity("https://fakestoreapi.com/products", requestBody, ResponseDTO.class);
         return convertFakeStoreResponseToProduct(response.getBody());
     }
+
+    public Product updateProduct(Integer id,String title, String imageURL, String category, String description) {
+
+        return null;
+    }
+
 }
