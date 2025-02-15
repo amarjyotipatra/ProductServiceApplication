@@ -55,12 +55,12 @@ public class ProductController {
                 request.getTitle(), request.getImageURL(), request.getCategory().getTitle(),request.getDescription()));
     }
 
-    @PutMapping("/products")
-    public ResponseEntity<Product> updateProduct(@RequestBody UpdateProductrequestDTO request) throws ProductNotFoundException {
-        if(request.getId()==null) throw new IllegalArgumentException("id is null");
-        return ResponseEntity.ok(service.updateProduct(request.getId(),request.getTitle(),request.getImageURL(),
-                request.getDescription(),request.getCategory().getTitle()));
-    }
+//    @PutMapping("/products")
+//    public ResponseEntity<Product> updateProduct(@RequestBody UpdateProductrequestDTO request) throws ProductNotFoundException {
+//        if(request.getId()==null) throw new IllegalArgumentException("id is null");
+//        return ResponseEntity.ok(service.updateProduct(request.getId(),request.getTitle(),request.getImageURL(),
+//                request.getDescription(),request.getCategory().getTitle()));
+//    }
 
     @DeleteMapping("/products/{id}")
     public void deleteProductById(@PathVariable("id") int id) {}

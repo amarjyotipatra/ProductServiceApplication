@@ -72,9 +72,9 @@ public class ProductService {
         return convertFakeStoreResponseToProduct(response.getBody());
     }
 
-    public Product updateProduct(Integer id,String title, String imageURL, String category, String description) {
-
-        return null;
-    }
+//    public Product updateProduct(Integer id,String title, String imageURL, String category, String description) {
+//
+//        return null;
+//    }
 
 }
