@@ -1,11 +1,10 @@
 package com.example.productservice.controller;
 
 import com.example.productservice.dto.CreateProductRequestDTO;
-import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +13,11 @@ import java.util.List;
 @RestController
 public class ProductController {
 
-    private  ProductService service;
+    private ProductService service;
 
-    public ProductController(ProductService service) {
-        this.service = service;
+    //We can inject either fakeProductService or selfProductService in this constructor
+    public ProductController(@Qualifier("selfProductService") ProductService inputService) {
+        this.service = inputService;
     }
 
     @GetMapping("/products")
@@ -48,8 +48,6 @@ public class ProductController {
             throw new IllegalArgumentException("Title cannot be null");
         if(request.getDescription()==null)
             throw new IllegalArgumentException("Description cannot be null");
-        if(request.getCategory()==null)
-            throw new IllegalArgumentException("Category cannot be null");
         if(request.getImageURL()==null)
             throw new IllegalArgumentException("ImageURL cannot be null");
 
@@ -64,6 +62,6 @@ public class ProductController {
 //                request.getDescription(),request.getCategory().getTitle()));
 //    }
 
-    @DeleteMapping("/products/{id}")
-    public void deleteProductById(@PathVariable("id") int id) {}
+//    @DeleteMapping("/products/{id}")
+//    public Product deleteProductById(@PathVariable("id") int id) {}
 }
