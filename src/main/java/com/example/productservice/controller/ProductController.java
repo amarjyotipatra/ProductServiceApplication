@@ -32,7 +32,9 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") int id) throws ProductNotFoundException {
         //validations
-        if(id == Integer.parseInt(null)) throw new IllegalArgumentException("id is null");
+        if(id <= 0) {
+            throw new IllegalArgumentException("Invalid id: " + id);
+        }
         Product product=service.getProductById(id);
         if(product==null) {
             throw new ProductNotFoundException("Product Not Found");

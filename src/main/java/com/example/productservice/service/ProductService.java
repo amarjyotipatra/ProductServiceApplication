@@ -21,7 +21,7 @@ public class ProductService {
         this.restTemplate = restTemplate;
     }
 
-    public Product getProductById(Integer id) {
+    public Product getProductById(int id) {
         //fakestore api call using restTemplate
          ResponseEntity<ResponseDTO> fakeStoreResponse=
                  restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, ResponseDTO.class);
