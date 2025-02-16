@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Category extends BaseModel {
     private String title;
     @OneToMany(mappedBy = "category")

@@ -4,6 +4,7 @@ import com.example.productservice.dto.CreateProductRequestDTO;
 import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,7 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody CreateProductRequestDTO request) {
         if(request.getTitle()==null)
@@ -63,5 +65,10 @@ public class ProductController {
 //    }
 
 //    @DeleteMapping("/products/{id}")
-//    public Product deleteProductById(@PathVariable("id") int id) {}
+//    public Product deleteProductById(@PathVariable("id") int id) {
+//         if(id <= 0) {
+//             throw new IllegalArgumentException("Invalid id: " + id);
+//         }
+//
+//    }
 }
