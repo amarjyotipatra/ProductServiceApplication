@@ -1,5 +1,6 @@
 package com.example.productservice.service;
 
+import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.CategoryRepo;
@@ -78,6 +79,17 @@ public class SelfProductService implements ProductService {
         }
         if(description == null || description.trim().isEmpty()) {
             throw new IllegalArgumentException("Description cannot be empty");
+        }
+    }
+
+    public Product deleteProductById(int id) throws ProductNotFoundException {
+        Optional<Product> productOptional = productRepo.findById(id);
+
+        if (productOptional.isPresent()) {
+            productRepo.deleteById(id); // Delete the product
+            return productOptional.get(); // Return the deleted product
+        } else {
+            throw new ProductNotFoundException("Product not found with id: " + id);
         }
     }
 }

@@ -2,7 +2,6 @@ package com.example.productservice.repository;
 
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +22,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
     Optional<List<Product>> findAllByCategory(Category c);
 
-    void deleteById(int id);
+    Optional<Product> deleteById(int id);
 
     void deleteAllByCategory(Category c);
 }

@@ -1,6 +1,5 @@
 package com.example.productservice.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;

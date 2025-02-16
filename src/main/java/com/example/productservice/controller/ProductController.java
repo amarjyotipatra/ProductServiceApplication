@@ -64,11 +64,15 @@ public class ProductController {
 //                request.getDescription(),request.getCategory().getTitle()));
 //    }
 
-//    @DeleteMapping("/products/{id}")
-//    public Product deleteProductById(@PathVariable("id") int id) {
-//         if(id <= 0) {
-//             throw new IllegalArgumentException("Invalid id: " + id);
-//         }
-//
-//    }
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Product> deleteProductById(@PathVariable("id") int id) throws ProductNotFoundException {
+         if(id <= 0) {
+             throw new IllegalArgumentException("Invalid id: " + id);
+         }
+         Product product=service.deleteProductById(id);
+         if(product==null) {
+             throw new ProductNotFoundException("Product Not Found!!!");
+         }
+         return ResponseEntity.ok(product);
+    }
 }

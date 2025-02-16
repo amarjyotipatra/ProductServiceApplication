@@ -47,7 +47,7 @@ public class FakeStoreProductService implements ProductService {
         Category category = new Category();
         category.setTitle(response.getCategory());
 
-        product.setId(response.getId());
+        product.setId((int) response.getId());
         product.setCategory(category);
         product.setDescription(response.getDescription());
         product.setImageURL(response.getImage());
@@ -81,5 +81,18 @@ public class FakeStoreProductService implements ProductService {
 //
 //        return null;
 //    }
+
+    @Override
+    public Product deleteProductById(int id) {
+        // Step 1: Fetch the product before deletion (to return it later)
+        Product productToDelete = getProductById(id);
+
+        // Step 2: Make DELETE request to FakeStore API
+        String url = "https://fakestoreapi.com/products/" + id;
+        restTemplate.delete(url); // FakeStore API does not return a response body on DELETE
+
+        // Step 3: Return the deleted product details
+        return productToDelete;
+    }
 
 }
