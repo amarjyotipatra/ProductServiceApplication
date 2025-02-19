@@ -1,5 +1,6 @@
 package com.example.productservice.service;
 
+import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
@@ -23,17 +24,18 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public Product getProductById(int id) {
-        Optional<Product> response= productRepo.findById(id);
+    public Product getProductById(int id) throws ProductNotFoundException {
+        Optional<Product> response= productRepo.findByIdAndIsDeletedFalse(id);
         if(response.isPresent()){
             return response.get();
+        }else{
+            throw new ProductNotFoundException("Invalid Id :"+ id);
         }
-        return response.get();
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return productRepo.findAll();
+        return productRepo.findAllByIsDeletedFalse();
     }
 
     @Override
@@ -48,7 +50,7 @@ public class SelfProductService implements ProductService {
         product.setCreatedAt(new Date());
         product.setUpdatedAt(new Date());
         //checking if category is present or not in database
-        Optional<Category> existingCategory= categoryRepo.findByTitle(category);
+        Optional<Category> existingCategory= categoryRepo.findByTitleAndIsDeletedFalse(category);
         Category categoryObj;
 
         if(existingCategory.isPresent()){
@@ -82,12 +84,42 @@ public class SelfProductService implements ProductService {
         }
     }
 
+    @Override
+    public Product updateProduct(UpdateProductrequestDTO request) throws ProductNotFoundException {
+        Optional<Product> existingProductOptional= productRepo.findByIdAndIsDeletedFalse(request.getId());
+
+        if(existingProductOptional.isPresent()){
+            Product existingProduct = existingProductOptional.get();
+            existingProduct.setTitle(request.getTitle());
+            existingProduct.setImageURL(request.getImageURL());
+            existingProduct.setDescription(request.getDescription());
+            existingProduct.setUpdatedAt(new Date());
+            if(request.getCategory() != null && request.getCategory().getTitle() != null) {
+                Optional<Category> exitingCategory = categoryRepo.findByTitleAndIsDeletedFalse(request.getCategory().getTitle());
+                Category categoryObj=exitingCategory.orElseGet(() -> {
+                    Category newCategory = new Category();
+                    newCategory.setTitle(request.getCategory().getTitle());
+                    return categoryRepo.save(newCategory);
+                });
+
+                existingProduct.setCategory(categoryObj);
+            }
+            return productRepo.save(existingProduct);
+        }else{
+            throw new ProductNotFoundException("Invalid Id :"+ request.getId());
+        }
+
+    }
+
     public Product deleteProductById(int id) throws ProductNotFoundException {
         Optional<Product> productOptional = productRepo.findById(id);
 
         if (productOptional.isPresent()) {
-            productRepo.deleteById(id); // Delete the product
-            return productOptional.get(); // Return the deleted product
+            Product product = productOptional.get();
+            product.setDeleted(true);
+            product.setUpdatedAt(new Date());
+            productRepo.save(product);
+            return product;
         } else {
             throw new ProductNotFoundException("Product not found with id: " + id);
         }

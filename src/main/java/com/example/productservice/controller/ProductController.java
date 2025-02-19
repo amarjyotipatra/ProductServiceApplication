@@ -1,6 +1,7 @@
 package com.example.productservice.controller;
 
 import com.example.productservice.dto.CreateProductRequestDTO;
+import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
@@ -57,12 +58,12 @@ public class ProductController {
                 request.getTitle(), request.getImageURL(), request.getCategory().getTitle(),request.getDescription()));
     }
 
-//    @PutMapping("/products")
-//    public ResponseEntity<Product> updateProduct(@RequestBody UpdateProductrequestDTO request) throws ProductNotFoundException {
-//        if(request.getId()==null) throw new IllegalArgumentException("id is null");
-//        return ResponseEntity.ok(service.updateProduct(request.getId(),request.getTitle(),request.getImageURL(),
-//                request.getDescription(),request.getCategory().getTitle()));
-//    }
+    @PatchMapping("/products")
+    public ResponseEntity<Product> updateProduct(@RequestBody UpdateProductrequestDTO request) throws ProductNotFoundException {
+        if(request.getId()==null) throw new IllegalArgumentException("id is null");
+        Product updatedProduct= service.updateProduct(request);
+        return ResponseEntity.ok(updatedProduct);
+    }
 
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Product> deleteProductById(@PathVariable("id") int id) throws ProductNotFoundException {

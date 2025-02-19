@@ -11,9 +11,12 @@ import java.util.Optional;
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer> {
     // Select * from products where id = id;
-    Optional<Product> findById(int id);
+    Optional<Product> findByIdAndIsDeletedFalse(int id);
 
-    Product save(Product p);
+    //find all records where isDeleted attribute is false
+    List<Product> findAllByIsDeletedFalse();
+
+    Optional<List<Product>> findAllByCategoryAndIsDeletedFalse(Category c);
 
     Optional<Product> findByCategory(Category c);
 
@@ -25,4 +28,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
     Optional<Product> deleteById(int id);
 
     void deleteAllByCategory(Category c);
+
+    Product save(Product p);
+
 }

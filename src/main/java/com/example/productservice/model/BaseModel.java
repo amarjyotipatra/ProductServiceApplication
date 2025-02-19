@@ -21,7 +21,8 @@ public class BaseModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    private boolean isDeleted;
+    @Column(nullable = false)
+    private boolean isDeleted=false;//soft delete flag
 
     // Auto set createdAt before inserting
     @PrePersist

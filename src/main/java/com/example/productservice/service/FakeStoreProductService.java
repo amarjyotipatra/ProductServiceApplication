@@ -1,9 +1,12 @@
 package com.example.productservice.service;
 
 import com.example.productservice.dto.ResponseDTO;
+import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.ProductRepo;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -77,10 +80,30 @@ public class FakeStoreProductService implements ProductService {
         return convertFakeStoreResponseToProduct(response.getBody());
     }
 
-//    public Product updateProduct(Integer id,String title, String imageURL, String category, String description) {
-//
-//        return null;
-//    }
+    @Override
+    public Product updateProduct(UpdateProductrequestDTO requestDTO) {
+        if (requestDTO.getId() == null || requestDTO.getId() <= 0) {
+            throw new IllegalArgumentException("Invalid product ID");
+        }
+
+        // Fetch existing product to avoid overwriting null values
+        Product existingProduct = getProductById(requestDTO.getId());
+
+        // Prepare request payload with updated fields
+        ResponseDTO updateRequest = new ResponseDTO();
+        updateRequest.setTitle(requestDTO.getTitle() != null ? requestDTO.getTitle() : existingProduct.getTitle());
+        updateRequest.setDescription(requestDTO.getDescription() != null ? requestDTO.getDescription() : existingProduct.getDescription());
+        updateRequest.setImage(requestDTO.getImageURL() != null ? requestDTO.getImageURL() : existingProduct.getImageURL());
+        updateRequest.setCategory(requestDTO.getCategory() != null ? requestDTO.getCategory().getTitle() : existingProduct.getCategory().getTitle());
+
+        // Send PUT request to FakeStore API
+        String url = "https://fakestoreapi.com/products/" + requestDTO.getId();
+        ResponseEntity<ResponseDTO> response = restTemplate.exchange(url, HttpMethod.PATCH, new HttpEntity<>(updateRequest), ResponseDTO.class);
+
+        // Convert API response back to Product model
+        return convertFakeStoreResponseToProduct(response.getBody());
+    }
+
 
     @Override
     public Product deleteProductById(int id) {

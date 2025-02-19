@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class CategoryRequestDTO {
     private Integer id;
     private String title;
