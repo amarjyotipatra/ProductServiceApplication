@@ -2,7 +2,10 @@ package com.example.productservice.repository;
 
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
+import com.example.productservice.repository.projection.ProductProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,5 +33,13 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
     void deleteAllByCategory(Category c);
 
     Product save(Product p);
+
+    //HQL queries
+
+    @Query("select p.title, p.description from Product p where p.title=:title")
+    ProductProjection getProductNameByTitle(@Param("title") String title);
+
+    @Query("select p from Product p where p.title=:title and p.id=:id")
+    Product getProductByTitleAndProductId(@Param("title") String title, @Param("id") int id);
 
 }

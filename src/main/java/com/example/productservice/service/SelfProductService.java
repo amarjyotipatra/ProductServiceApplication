@@ -111,6 +111,7 @@ public class SelfProductService implements ProductService {
 
     }
 
+    @Override
     public Product deleteProductById(int id) throws ProductNotFoundException {
         Optional<Product> productOptional = productRepo.findById(id);
 
