@@ -24,6 +24,8 @@ public class BaseModel {
     @Column(nullable = false)
     private boolean isDeleted=false;//soft delete flag
 
+    private String createdByUserName;
+
     // Auto set createdAt before inserting
     @PrePersist
     protected void onCreate() {
