@@ -21,7 +21,7 @@ class ProductServiceApplicationTests {
     @Test
     void testProductRepo(){
         Optional<Product> p = _productRepo.findById(1);
-        System.out.println(p.get());
+        System.out.println(p.orElse(null));
     }
 
 }
