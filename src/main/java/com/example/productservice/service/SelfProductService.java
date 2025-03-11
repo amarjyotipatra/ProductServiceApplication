@@ -6,6 +6,10 @@ import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.CategoryRepo;
 import com.example.productservice.repository.ProductRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -37,6 +41,15 @@ public class SelfProductService implements ProductService {
     public List<Product> getAllProducts() {
         return productRepo.findAllByIsDeletedFalse();
     }
+
+    @Override
+    public Page<Product> getPaginatedProducts(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable sortedPageable = PageRequest.of(pageNo + 1, pageSize, Sort.Direction.ASC, "title");
+        Page<Product> productPage = productRepo.findAll(sortedPageable);
+        return productPage;
+    }
+
 
     @Override
     public Product createProduct(String title, String imageURL, String category, String description) {

@@ -3,6 +3,7 @@ package com.example.productservice.service;
 import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.model.Product;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,4 +19,5 @@ public interface ProductService {
 
     Product deleteProductById(int id) throws ProductNotFoundException;
 
+    Page<Product> getPaginatedProducts(int pageNo, int pageSize);
 }

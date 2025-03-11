@@ -5,6 +5,7 @@ import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.ProductRepo;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,12 @@ public class FakeStoreProductService implements ProductService {
         }
         return products;
     }
+
+    @Override
+    public Page<Product> getPaginatedProducts(int pageNo, int pageSize) {
+        return null;
+    }
+
 
     @Override
     public Product createProduct(String title, String imageURL, String category, String description) {

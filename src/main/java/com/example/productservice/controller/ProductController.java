@@ -7,6 +7,7 @@ import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,13 @@ public class ProductController {
             throw new ProductNotFoundException("Product Not Found");
         }
         return ResponseEntity.ok(product);
+    }
+
+    @GetMapping("/products/{pageNo}/{pageSize}")
+    public ResponseEntity<Page<Product>> getProductsByPage(@PathVariable("pageNo") int pageNo, @PathVariable("pageSize") int pageSize){
+        //implementing pagination logic
+        Page<Product> products=service.getPaginatedProducts(pageNo, pageSize);
+        return ResponseEntity.ok(products);
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
