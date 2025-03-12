@@ -45,7 +45,8 @@ public class SelfProductService implements ProductService {
     @Override
     public Page<Product> getPaginatedProducts(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Pageable sortedPageable = PageRequest.of(pageNo + 1, pageSize, Sort.Direction.ASC, "title");
+        //To make pageNo. 1 based indexing , we need to subtract 1 from pageNo. which is passed from Request Body of controller
+        Pageable sortedPageable = PageRequest.of(pageNo - 1 , pageSize, Sort.Direction.ASC, "id");
         Page<Product> productPage = productRepo.findAll(sortedPageable);
         return productPage;
     }
