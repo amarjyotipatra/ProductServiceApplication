@@ -6,6 +6,8 @@ import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.CategoryRepo;
 import com.example.productservice.repository.ProductRepo;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,7 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "products", key = "#id")
     public Product getProductById(int id) throws ProductNotFoundException {
         Optional<Product> response= productRepo.findByIdAndIsDeletedFalse(id);
         if(response.isPresent()){
@@ -38,6 +41,7 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "products")
     public List<Product> getAllProducts() {
         return productRepo.findAllByIsDeletedFalse();
     }
@@ -53,6 +57,7 @@ public class SelfProductService implements ProductService {
 
 
     @Override
+    @CachePut(value = "products", key = "#result.id")
     public Product createProduct(String title, String imageURL, String category, String description) {
         //validation
         validateInputRequest(title,imageURL,category,description);
@@ -99,6 +104,7 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
+    @CachePut(value = "products", key = "#result.id")
     public Product updateProduct(UpdateProductrequestDTO request) throws ProductNotFoundException {
         Optional<Product> existingProductOptional= productRepo.findByIdAndIsDeletedFalse(request.getId());
 

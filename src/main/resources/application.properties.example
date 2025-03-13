@@ -10,3 +10,8 @@ spring.jpa.show-sql= true
 spring.jpa.properties.hibernate.format_sql=true
 #flyaway properties
 #spring.flyway.baseline-on-migrate=true
+
+#redis caching props
+spring.cache.type=redis
+spring.cache.host=
+spring.cache.port=6379

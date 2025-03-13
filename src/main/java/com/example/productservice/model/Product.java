@@ -7,10 +7,12 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @Setter
-public class Product extends BaseModel {
+public class Product extends BaseModel implements Serializable {
     private String title;
     private String description;
     private String imageURL;
