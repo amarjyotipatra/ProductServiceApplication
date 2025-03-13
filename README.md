@@ -58,9 +58,6 @@ This is a Spring Boot-based microservice designed to manage products. It utilize
     *   **Security:** Use environment variables to store sensitive information like database credentials for production environments.
     *   **Local Development (Optional):** If you prefer, you can create an `application-local.properties` file for local testing. Do *not* commit this file to the repository.
 
-        ```properties
-        #local configuration properties
-        ```
 
 3.  **Build the Project:**
 
