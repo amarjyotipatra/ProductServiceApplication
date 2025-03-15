@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -105,6 +106,7 @@ public class SelfProductService implements ProductService {
 
     @Override
     @CachePut(value = "products", key = "#result.id")
+    @Transactional
     public Product updateProduct(UpdateProductrequestDTO request) throws ProductNotFoundException {
         Optional<Product> existingProductOptional= productRepo.findByIdAndIsDeletedFalse(request.getId());
 
