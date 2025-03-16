@@ -58,35 +58,40 @@ public class SelfProductService implements ProductService {
 
 
     @Override
+    @Transactional
     @CachePut(value = "products", key = "#result.id")
-    public Product createProduct(String title, String imageURL, String category, String description) {
-        //validation
-        validateInputRequest(title,imageURL,category,description);
-        //create a product
-        Product product = new Product();
-        product.setTitle(title);
-        product.setImageURL(imageURL);
-        product.setDescription(description);
-        product.setCreatedAt(new Date());
-        product.setUpdatedAt(new Date());
-        //checking if category is present or not in database
-        Optional<Category> existingCategory= categoryRepo.findByTitleAndIsDeletedFalse(category);
-        Category categoryObj;
+    public Product createProduct(String title, String imageURL, String category, String description) throws RuntimeException {
+        try {
+            //validation
+            validateInputRequest(title,imageURL,category,description);
+            //create a product
+            Product product = new Product();
+            product.setTitle(title);
+            product.setImageURL(imageURL);
+            product.setDescription(description);
+            product.setCreatedAt(new Date());
+            product.setUpdatedAt(new Date());
+            //checking if category is present or not in database
+            Optional<Category> existingCategory= categoryRepo.findByTitleAndIsDeletedFalse(category);
+            Category categoryObj;
 
-        if(existingCategory.isPresent()){
-            // Use the existing category if present
-            categoryObj = existingCategory.get();
-        } else {
-            // Otherwise, create a new category
-            categoryObj = new Category();
-            categoryObj.setTitle(category);
-            // Optionally, save the new category if needed
-            categoryObj = categoryRepo.save(categoryObj);
+            if(existingCategory.isPresent()){
+                // Use the existing category if present
+                categoryObj = existingCategory.get();
+            } else {
+                // Otherwise, create a new category
+                categoryObj = new Category();
+                categoryObj.setTitle(category);
+                // Optionally, save the new category if needed
+                categoryObj = categoryRepo.save(categoryObj);
+            }
+            product.setCategory(categoryObj);
+            //save the product object to database
+            Product response=productRepo.save(product);
+            return response;
+        } catch (Exception e) {
+            throw new RuntimeException("Error while creating product:" + e.getMessage());
         }
-        product.setCategory(categoryObj);
-        //save the product object to database
-        Product response=productRepo.save(product);
-        return response;
     }
 
     private void validateInputRequest(String title, String imageURL, String category, String description) {
