@@ -20,11 +20,9 @@ import java.util.Objects;
 public class FakeStoreProductService implements ProductService {
 
     private final RestTemplate  restTemplate;
-    private ProductRepo productRepo;
 
-    public FakeStoreProductService(RestTemplate restTemplate, ProductRepo productRepo) {
+    public FakeStoreProductService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.productRepo = productRepo;
     }
 
     @Override
