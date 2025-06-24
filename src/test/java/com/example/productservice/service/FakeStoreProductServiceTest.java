@@ -1,10 +1,10 @@
 package com.example.productservice.service;
 
+import com.example.productservice.dto.CategoryRequestDTO;
 import com.example.productservice.dto.ResponseDTO;
 import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
-import com.example.productservice.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +44,7 @@ class FakeStoreProductServiceTest {
         sampleResponseDTO.setDescription("Test Description");
         sampleResponseDTO.setImage("http://test.com/image.jpg");
         sampleResponseDTO.setCategory("Electronics");
-        sampleResponseDTO.setPrice(99.99);
+        // Note: Not setting price as it's not in the ResponseDTO
 
         // Initialize sample Product
         sampleProduct = new Product();
@@ -158,9 +157,9 @@ class FakeStoreProductServiceTest {
         requestDTO.setId(1);
         requestDTO.setTitle("Updated Product");
 
-        Category category = new Category();
-        category.setTitle("Electronics");
-        requestDTO.setCategory(category);
+        CategoryRequestDTO categoryDTO = new CategoryRequestDTO();
+        categoryDTO.setTitle("Electronics");
+        requestDTO.setCategory(categoryDTO);
 
         // Act
         Product result = fakeStoreProductService.updateProduct(requestDTO);

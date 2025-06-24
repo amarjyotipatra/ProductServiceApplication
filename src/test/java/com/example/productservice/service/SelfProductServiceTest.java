@@ -1,5 +1,6 @@
 package com.example.productservice.service;
 
+import com.example.productservice.dto.CategoryRequestDTO;
 import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.model.Category;
@@ -14,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -196,9 +196,9 @@ class SelfProductServiceTest {
         updateRequest.setDescription("Updated Description");
         updateRequest.setImageURL("http://test.com/updated.jpg");
 
-        Category category = new Category();
-        category.setTitle("Electronics");
-        updateRequest.setCategory(category);
+        CategoryRequestDTO categoryDTO = new CategoryRequestDTO();
+        categoryDTO.setTitle("Electronics");
+        updateRequest.setCategory(categoryDTO);
 
         when(productRepo.findByIdAndIsDeletedFalse(1)).thenReturn(Optional.of(sampleProduct));
         when(categoryRepo.findByTitleAndIsDeletedFalse("Electronics")).thenReturn(Optional.of(sampleCategory));

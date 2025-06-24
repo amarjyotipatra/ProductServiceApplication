@@ -1,5 +1,6 @@
 package com.example.productservice.controller;
 
+import com.example.productservice.dto.CategoryRequestDTO;
 import com.example.productservice.dto.CreateProductRequestDTO;
 import com.example.productservice.dto.UpdateProductrequestDTO;
 import com.example.productservice.exception.ProductNotFoundException;
@@ -142,9 +143,9 @@ class ProductControllerTest {
         requestDTO.setDescription("New Description");
         requestDTO.setImageURL("http://test.com/new.jpg");
 
-        Category category = new Category();
-        category.setTitle("Electronics");
-        requestDTO.setCategory(category);
+        CategoryRequestDTO categoryDTO = new CategoryRequestDTO();
+        categoryDTO.setTitle("Electronics");
+        requestDTO.setCategory(categoryDTO);
 
         when(productService.createProduct(anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(sampleProduct);
@@ -164,9 +165,9 @@ class ProductControllerTest {
         requestDTO.setDescription("New Description");
         requestDTO.setImageURL("http://test.com/new.jpg");
 
-        Category category = new Category();
-        category.setTitle("Electronics");
-        requestDTO.setCategory(category);
+        CategoryRequestDTO categoryDTO = new CategoryRequestDTO();
+        categoryDTO.setTitle("Electronics");
+        requestDTO.setCategory(categoryDTO);
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> productController.createProduct(requestDTO));
@@ -181,9 +182,9 @@ class ProductControllerTest {
         requestDTO.setDescription("Updated Description");
         requestDTO.setImageURL("http://test.com/updated.jpg");
 
-        Category category = new Category();
-        category.setTitle("Electronics");
-        requestDTO.setCategory(category);
+        CategoryRequestDTO categoryDTO = new CategoryRequestDTO();
+        categoryDTO.setTitle("Electronics");
+        requestDTO.setCategory(categoryDTO);
 
         Product updatedProduct = new Product();
         updatedProduct.setId(1);
