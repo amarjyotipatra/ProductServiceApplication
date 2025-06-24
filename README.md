@@ -118,3 +118,73 @@ This is a Spring Boot-based microservice designed to manage products. It utilize
 *   **Data Integrity:** Methods in `SelfProductService` responsible for creating and updating products are annotated with `@Transactional`. This ensures that all database operations within these methods are treated as a single, atomic unit. If any operation fails, the entire transaction is rolled back, preventing partial updates and maintaining data consistency.
 * **Rollback**: If an exception is thrown, all the operations within the method will be rolled back.
 * **Commit**: If all the operations are successful, then the changes will be committed.
+
+## Testing
+
+The application includes comprehensive test coverage for both the `FakeStoreProductService` and `SelfProductService` implementations.
+
+### Running Tests
+
+To run all tests:
+
+```bash
+./gradlew test
+```
+
+To run specific test classes:
+
+```bash
+./gradlew test --tests "com.example.productservice.service.FakeStoreProductServiceTest"
+./gradlew test --tests "com.example.productservice.service.SelfProductServiceTest"
+```
+
+### Test Coverage
+
+To generate test coverage reports:
+
+1. Run the tests with coverage:
+
+```bash
+./gradlew test jacocoTestReport
+```
+
+2. View the generated HTML coverage report:
+   - Open `build/reports/jacoco/test/html/index.html` in your browser
+
+### Test Structure
+
+The test suite includes:
+
+* **Unit Tests**: Focused on testing individual components in isolation
+  * `FakeStoreProductServiceTest`: Tests the external API integration service
+  * `SelfProductServiceTest`: Tests the database-backed implementation
+
+* **Key Test Scenarios**:
+  * Product retrieval (by ID and all products)
+  * Product creation (with new and existing categories)
+  * Product updates
+  * Product deletion
+  * Error handling and validation
+  * Pagination functionality
+
+### Mocking Strategy
+
+* **Mockito**: Used for mocking dependencies
+* **Mock Objects**: RestTemplate, ProductRepo, and CategoryRepo are mocked to isolate unit tests
+* **Specific Test Data**: Each test uses specific, controlled test data to ensure predictable results
+
+### Best Practices
+
+* Tests follow the Arrange-Act-Assert pattern
+* Each test focuses on a single functionality
+* Descriptive test method names that explain the scenario and expected outcome
+* Proper verification of mock interactions
+* Appropriate exception testing
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin feature/my-new-feature`
+5. Submit a pull request
