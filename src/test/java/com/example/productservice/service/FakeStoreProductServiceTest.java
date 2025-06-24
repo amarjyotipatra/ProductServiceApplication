@@ -149,7 +149,14 @@ class FakeStoreProductServiceTest {
         when(restTemplate.getForEntity("https://fakestoreapi.com/products/1", ResponseDTO.class))
                 .thenReturn(getResponseEntity);
 
-        ResponseEntity<ResponseDTO> updateResponseEntity = new ResponseEntity<>(sampleResponseDTO, HttpStatus.OK);
+        ResponseDTO updatedResponseDTO = new ResponseDTO();
+        updatedResponseDTO.setId(1);
+        updatedResponseDTO.setTitle("Updated Product");
+        updatedResponseDTO.setDescription("Test Description");
+        updatedResponseDTO.setImage("http://test.com/image.jpg");
+        updatedResponseDTO.setCategory("Electronics");
+
+        ResponseEntity<ResponseDTO> updateResponseEntity = new ResponseEntity<>(updatedResponseDTO, HttpStatus.OK);
         when(restTemplate.exchange(eq("https://fakestoreapi.com/products/1"), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(ResponseDTO.class)))
                 .thenReturn(updateResponseEntity);
 
@@ -167,7 +174,7 @@ class FakeStoreProductServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(1, result.getId());
-        assertEquals("Test Product", result.getTitle()); // Using the response from the mock
+        assertEquals("Updated Product", result.getTitle());
         verify(restTemplate).exchange(eq("https://fakestoreapi.com/products/1"), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(ResponseDTO.class));
     }
 
@@ -188,6 +195,9 @@ class FakeStoreProductServiceTest {
         when(restTemplate.getForEntity("https://fakestoreapi.com/products/1", ResponseDTO.class))
                 .thenReturn(getResponseEntity);
 
+        // Mocking the delete method call
+        doNothing().when(restTemplate).delete("https://fakestoreapi.com/products/1");
+
         // Act
         Product result = fakeStoreProductService.deleteProductById(1);
 
@@ -195,6 +205,10 @@ class FakeStoreProductServiceTest {
         assertNotNull(result);
         assertEquals(1, result.getId());
         assertEquals("Test Product", result.getTitle());
+        assertEquals("Electronics", result.getCategory().getTitle());
+        // Verify that delete was called
         verify(restTemplate).delete("https://fakestoreapi.com/products/1");
+        // Verify that getForEntity was called to fetch the product before deletion
+        verify(restTemplate).getForEntity("https://fakestoreapi.com/products/1", ResponseDTO.class);
     }
 }

@@ -135,7 +135,12 @@ class SelfProductServiceTest {
     void createProduct_ReturnsNewProduct_WhenCategoryExists() {
         // Arrange
         when(categoryRepo.findByTitleAndIsDeletedFalse("Electronics")).thenReturn(Optional.of(sampleCategory));
-        when(productRepo.save(any(Product.class))).thenReturn(sampleProduct);
+        
+        when(productRepo.save(any(Product.class))).thenAnswer(invocation -> {
+            Product savedProduct = invocation.getArgument(0);
+            savedProduct.setId(1); // Simulate database saving with ID
+            return savedProduct;
+        });
 
         // Act
         Product result = selfProductService.createProduct("Test Product", "http://test.com/image.jpg", "Electronics", "Test Description");
@@ -159,13 +164,20 @@ class SelfProductServiceTest {
         newCategory.setTitle("NewCategory");
 
         when(categoryRepo.save(any(Category.class))).thenReturn(newCategory);
-        when(productRepo.save(any(Product.class))).thenReturn(sampleProduct);
+        
+        when(productRepo.save(any(Product.class))).thenAnswer(invocation -> {
+            Product savedProduct = invocation.getArgument(0);
+            savedProduct.setId(1); // Simulate database saving with ID
+            return savedProduct;
+        });
 
         // Act
         Product result = selfProductService.createProduct("Test Product", "http://test.com/image.jpg", "NewCategory", "Test Description");
 
         // Assert
         assertNotNull(result);
+        assertEquals("Test Product", result.getTitle());
+        assertEquals("NewCategory", result.getCategory().getTitle());
         verify(categoryRepo).findByTitleAndIsDeletedFalse("NewCategory");
         verify(categoryRepo).save(any(Category.class));
         verify(productRepo).save(any(Product.class));
@@ -219,6 +231,7 @@ class SelfProductServiceTest {
         assertNotNull(result);
         assertEquals("Updated Product", result.getTitle());
         assertEquals("Updated Description", result.getDescription());
+        assertEquals("http://test.com/updated.jpg", result.getImageURL());
         verify(productRepo).findByIdAndIsDeletedFalse(1);
         verify(categoryRepo).findByTitleAndIsDeletedFalse("Electronics");
         verify(productRepo).save(any(Product.class));
@@ -242,7 +255,18 @@ class SelfProductServiceTest {
     void deleteProductById_ReturnsDeletedProduct_WhenProductExists() throws ProductNotFoundException {
         // Arrange
         when(productRepo.findById(1)).thenReturn(Optional.of(sampleProduct));
-        when(productRepo.save(any(Product.class))).thenReturn(sampleProduct);
+        
+        Product deletedProduct = new Product();
+        deletedProduct.setId(1);
+        deletedProduct.setTitle("Test Product");
+        deletedProduct.setCategory(sampleCategory);
+        deletedProduct.setDeleted(true);
+        
+        when(productRepo.save(any(Product.class))).thenAnswer(invocation -> {
+            Product savedProduct = invocation.getArgument(0);
+            assertTrue(savedProduct.isDeleted(), "Product should be marked as deleted");
+            return savedProduct;
+        });
 
         // Act
         Product result = selfProductService.deleteProductById(1);
@@ -250,6 +274,7 @@ class SelfProductServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(1, result.getId());
+        assertTrue(result.isDeleted(), "Returned product should be marked as deleted");
         verify(productRepo).findById(1);
         verify(productRepo).save(any(Product.class));
     }

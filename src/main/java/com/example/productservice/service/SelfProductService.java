@@ -61,18 +61,20 @@ public class SelfProductService implements ProductService {
     @Transactional
     @CachePut(value = "products", key = "#result.id")
     public Product createProduct(String title, String imageURL, String category, String description) throws RuntimeException {
+        // Validate input before entering the try block to allow validation exceptions to propagate directly
+        validateInputRequest(title, imageURL, category, description);
+
         try {
-            //validation
-            validateInputRequest(title,imageURL,category,description);
-            //create a product
+            // Create a product
             Product product = new Product();
             product.setTitle(title);
             product.setImageURL(imageURL);
             product.setDescription(description);
             product.setCreatedAt(new Date());
             product.setUpdatedAt(new Date());
-            //checking if category is present or not in database
-            Optional<Category> existingCategory= categoryRepo.findByTitleAndIsDeletedFalse(category);
+
+            // Checking if category is present or not in database
+            Optional<Category> existingCategory = categoryRepo.findByTitleAndIsDeletedFalse(category);
             Category categoryObj;
 
             if(existingCategory.isPresent()){
@@ -86,8 +88,9 @@ public class SelfProductService implements ProductService {
                 categoryObj = categoryRepo.save(categoryObj);
             }
             product.setCategory(categoryObj);
-            //save the product object to database
-            Product response=productRepo.save(product);
+
+            // Save the product object to database
+            Product response = productRepo.save(product);
             return response;
         } catch (Exception e) {
             throw new RuntimeException("Error while creating product:" + e.getMessage());
