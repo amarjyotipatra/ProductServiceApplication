@@ -32,7 +32,6 @@ dependencies {
 //    implementation 'org.flywaydb:flyway-core'
 //    implementation 'org.flywaydb:flyway-mysql'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.4.3'
-    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-server
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.3.0")
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
